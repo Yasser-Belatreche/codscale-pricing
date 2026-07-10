@@ -5,6 +5,7 @@ interface NumberInputProps {
     suffix?: string;
     step?: number;
     min?: number;
+    size?: 'default' | 'wide';
 }
 
 export function NumberInput({
@@ -14,21 +15,36 @@ export function NumberInput({
     suffix,
     step = 1,
     min = 0,
+    size = 'default',
 }: NumberInputProps) {
+    const isWide = size === 'wide';
+
     return (
-        <label className="block">
-            <span className="mb-1.5 block text-xs text-[var(--color-muted)]">{label}</span>
-            <div className="flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 focus-within:border-[var(--color-accent)]">
+        <label className="block min-w-0">
+            <span className={`mb-1.5 block text-[var(--color-muted)] ${isWide ? 'text-sm' : 'text-xs'}`}>
+                {label}
+            </span>
+            <div
+                className={`flex min-w-0 items-center gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus-within:border-[var(--color-accent)] ${
+                    isWide ? 'px-4 py-3' : 'px-3 py-2'
+                }`}
+            >
                 <input
                     type="number"
                     value={Number.isFinite(value) ? value : 0}
                     min={min}
                     step={step}
                     onChange={e => onChange(Number.parseFloat(e.target.value) || 0)}
-                    className="w-full bg-transparent text-sm text-white outline-none"
+                    className={`min-w-0 flex-1 bg-transparent text-white outline-none tabular-nums ${
+                        isWide ? 'text-base font-medium' : 'text-sm'
+                    }`}
                 />
                 {suffix ? (
-                    <span className="shrink-0 text-xs text-[var(--color-muted)]">{suffix}</span>
+                    <span
+                        className={`shrink-0 text-[var(--color-muted)] ${isWide ? 'text-sm' : 'text-xs'}`}
+                    >
+                        {suffix}
+                    </span>
                 ) : null}
             </div>
         </label>

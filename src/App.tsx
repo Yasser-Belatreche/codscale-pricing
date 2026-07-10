@@ -111,7 +111,7 @@ export default function App() {
                 ))}
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
+            <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
                 <div className="space-y-4">
                     <Panel title="Product economics">
                         <div className="space-y-4">

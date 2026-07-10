@@ -20,7 +20,7 @@ function FeeGroup({
     return (
         <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
             <h3 className="mb-3 text-xs font-medium text-white">{title}</h3>
-            <div className="grid gap-3 sm:grid-cols-3">{children}</div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">{children}</div>
         </div>
     );
 }
@@ -47,6 +47,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                     suffix={currency}
                     step={countryId === 'lebanon' || countryId === 'iraq' ? 100 : 0.01}
                     min={0.0001}
+                    size="wide"
                 />
             </div>
 
@@ -61,6 +62,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                     <NumberInput
                         label="Returned"
@@ -71,6 +73,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                     <NumberInput
                         label="Delivered"
@@ -81,6 +84,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                 </FeeGroup>
 
@@ -94,6 +98,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                     <NumberInput
                         label="Returned"
@@ -104,6 +109,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                     <NumberInput
                         label="Delivered"
@@ -114,6 +120,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                 </FeeGroup>
 
@@ -127,6 +134,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                     <NumberInput
                         label="Return"
@@ -137,6 +145,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        size="wide"
                     />
                     <NumberInput
                         label="COD %"
@@ -148,6 +157,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                         }
                         suffix="%"
                         step={0.1}
+                        size="wide"
                     />
                     <NumberInput
                         label="TVA %"
@@ -159,6 +169,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                         }
                         suffix="%"
                         step={0.1}
+                        size="wide"
                     />
                 </FeeGroup>
             </div>

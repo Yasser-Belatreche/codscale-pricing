@@ -5,7 +5,7 @@ import {
     calculateProfit,
 } from './lib/calculate';
 import { COUNTRIES, getCountryMeta } from './lib/countries';
-import { formatLocal, usdToLocal } from './lib/currency';
+import { formatLocal, isUsdCurrency, usdToLocal } from './lib/currency';
 import { profitTargetsUsd } from './lib/calculate-profit-math';
 import { loadCalculatorState, loadFees, saveCalculatorState, saveFees } from './lib/storage';
 import type {
@@ -140,9 +140,11 @@ export default function App() {
                                 suffix="USD"
                                 step={0.01}
                             />
-                            <p className="-mt-2 text-xs text-[var(--color-muted)]">
-                                ≈ {formatLocal(purchaseLocal, country.currency)}
-                            </p>
+                            {!isUsdCurrency(country.currency) ? (
+                                <p className="-mt-2 text-xs text-[var(--color-muted)]">
+                                    ≈ {formatLocal(purchaseLocal, country.currency)}
+                                </p>
+                            ) : null}
 
                             <NumberInput
                                 label="Selling price"
@@ -160,7 +162,11 @@ export default function App() {
                                 max={10}
                                 step={0.1}
                                 format={v => `$${v.toFixed(2)}`}
-                                hint={`≈ ${formatLocal(cplLocal, country.currency)}`}
+                                hint={
+                                    isUsdCurrency(country.currency)
+                                        ? undefined
+                                        : `≈ ${formatLocal(cplLocal, country.currency)}`
+                                }
                             />
 
                             <SliderField

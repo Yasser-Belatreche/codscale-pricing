@@ -11,7 +11,7 @@ export const COUNTRIES: CountryMeta[] = [
     { id: 'algeria', name: 'Algeria', currency: 'DZD', flag: '🇩🇿' },
     { id: 'libya', name: 'Libya', currency: 'LYD', flag: '🇱🇾' },
     { id: 'iraq', name: 'Iraq', currency: 'IQD', flag: '🇮🇶' },
-    { id: 'lebanon', name: 'Lebanon', currency: 'LBP', flag: '🇱🇧' },
+    { id: 'lebanon', name: 'Lebanon', currency: 'USD', flag: '🇱🇧' },
 ];
 
 export const DEFAULT_FEES: Record<CountryId, CountryFeesConfig> = {
@@ -34,10 +34,10 @@ export const DEFAULT_FEES: Record<CountryId, CountryFeesConfig> = {
         shipping: { codPercentage: 0, tvaPercentage: 0, home: 4000, return: 2000 },
     },
     lebanon: {
-        usdToLocalRate: 89500,
-        confirmation: { cancelled: 9000, returned: 15000, delivered: 25000 },
-        fulfillment: { packaged: 45000, returned: 35000, delivered: 18000 },
-        shipping: { codPercentage: 0, tvaPercentage: 11, home: 300000, return: 150000 },
+        usdToLocalRate: 1,
+        confirmation: { cancelled: 0.1, returned: 0.2, delivered: 0.3 },
+        fulfillment: { packaged: 0.5, returned: 0.4, delivered: 0.2 },
+        shipping: { codPercentage: 0, tvaPercentage: 11, home: 3.5, return: 1.5 },
     },
 };
 
@@ -69,7 +69,7 @@ export const DEFAULT_CALCULATOR_VALUES: Record<CountryId, CountryCalculatorValue
     },
     lebanon: {
         purchasePriceInUsd: 5,
-        sellingPriceInLocal: 450000,
+        sellingPriceInLocal: 25,
         cpl: 1.5,
         confirmationRate: 60,
         deliveryRate: 70,

@@ -15,7 +15,14 @@ export function usdToLocal(usd: number, usdToLocalRate: number): number {
 }
 
 export function formatLocal(amount: number, currency: string): string {
+    if (currency === 'USD') {
+        return formatUsd(amount);
+    }
     return `${amount.toLocaleString(undefined, { maximumFractionDigits: 0 })} ${currency}`;
+}
+
+export function isUsdCurrency(currency: string): boolean {
+    return currency === 'USD';
 }
 
 export function formatUsd(amount: number): string {

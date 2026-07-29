@@ -39,7 +39,7 @@ export function loadFees(): Record<CountryId, CountryFeesConfig> {
         if (!raw) {
             return structuredClone(DEFAULT_FEES);
         }
-        return migrateFees(JSON.parse(raw));
+        return migrateLebanonFromLbp(migrateFees(JSON.parse(raw)));
     } catch {
         return structuredClone(DEFAULT_FEES);
     }
@@ -52,6 +52,24 @@ export function saveFees(fees: Record<CountryId, CountryFeesConfig>): void {
 interface StoredCalculatorState {
     selectedCountry: CountryId;
     byCountry: Record<CountryId, CountryCalculatorValues>;
+}
+
+function migrateLebanonFromLbp(
+    fees: Record<CountryId, CountryFeesConfig>,
+): Record<CountryId, CountryFeesConfig> {
+    if (fees.lebanon.usdToLocalRate > 100) {
+        return { ...fees, lebanon: structuredClone(DEFAULT_FEES.lebanon) };
+    }
+    return fees;
+}
+
+function migrateLebanonCalculatorFromLbp(
+    byCountry: Record<CountryId, CountryCalculatorValues>,
+): Record<CountryId, CountryCalculatorValues> {
+    if (byCountry.lebanon.sellingPriceInLocal > 1000) {
+        return { ...byCountry, lebanon: structuredClone(DEFAULT_CALCULATOR_VALUES.lebanon) };
+    }
+    return byCountry;
 }
 
 function migrateLegacyInputs(): StoredCalculatorState | null {
@@ -94,7 +112,7 @@ function normalizeCalculatorState(raw: Partial<StoredCalculatorState>): StoredCa
 
     return {
         selectedCountry: raw.selectedCountry ?? 'algeria',
-        byCountry,
+        byCountry: migrateLebanonCalculatorFromLbp(byCountry),
     };
 }
 

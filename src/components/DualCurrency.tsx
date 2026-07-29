@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { formatDualUsd } from '../lib/currency';
+import { formatDualUsd, isUsdCurrency } from '../lib/currency';
 
 interface DualCurrencyProps {
     usd: number;
@@ -19,6 +19,7 @@ export function DualCurrency({
     const { usd: usdText, local: localText } = formatDualUsd(usd, usdToLocalRate, currency);
     const primary = emphasize === 'usd' ? usdText : localText;
     const secondary = emphasize === 'usd' ? localText : usdText;
+    const showSecondary = !isUsdCurrency(currency);
 
     const sizeClass =
         size === 'lg' ? 'text-2xl font-bold' : size === 'sm' ? 'text-sm' : 'text-lg font-semibold';
@@ -26,7 +27,9 @@ export function DualCurrency({
     return (
         <div>
             <div className={`${sizeClass} text-white`}>{primary}</div>
-            <div className="text-xs text-[var(--color-muted)]">{secondary}</div>
+            {showSecondary ? (
+                <div className="text-xs text-[var(--color-muted)]">{secondary}</div>
+            ) : null}
         </div>
     );
 }
@@ -39,6 +42,9 @@ interface DualCurrencyInlineProps {
 
 export function DualCurrencyInline({ usd, usdToLocalRate, currency }: DualCurrencyInlineProps) {
     const { usd: usdText, local: localText } = formatDualUsd(usd, usdToLocalRate, currency);
+    if (isUsdCurrency(currency)) {
+        return <span className="text-sm text-white">{usdText}</span>;
+    }
     return (
         <span className="text-sm">
             <span className="text-white">{usdText}</span>

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { NumberInput } from './Inputs';
 import { Panel } from './DualCurrency';
+import { isUsdCurrency } from '../lib/currency';
 import type { CountryFeesConfig } from '../lib/types';
 import { getCountryMeta } from '../lib/countries';
 
@@ -32,24 +33,29 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
         onChange({ ...fees, ...partial });
     };
 
+    const usesUsd = isUsdCurrency(currency);
+
     return (
         <Panel title="Service fees & exchange rate">
             <p className="mb-4 text-xs text-[var(--color-muted)]">
-                Fees are entered in {currency}. They are converted to USD internally using the
-                exchange rate below.
+                {usesUsd
+                    ? `Fees are entered in ${currency}. No exchange conversion is applied.`
+                    : `Fees are entered in ${currency}. They are converted to USD internally using the exchange rate below.`}
             </p>
 
-            <div className="mb-4">
-                <NumberInput
-                    label={`Exchange rate (1 USD = ? ${currency})`}
-                    value={fees.usdToLocalRate}
-                    onChange={v => patch({ usdToLocalRate: v })}
-                    suffix={currency}
-                    step={countryId === 'lebanon' || countryId === 'iraq' ? 100 : 0.01}
-                    min={0.0001}
-                    size="wide"
-                />
-            </div>
+            {usesUsd ? null : (
+                <div className="mb-4">
+                    <NumberInput
+                        label={`Exchange rate (1 USD = ? ${currency})`}
+                        value={fees.usdToLocalRate}
+                        onChange={v => patch({ usdToLocalRate: v })}
+                        suffix={currency}
+                        step={countryId === 'iraq' ? 100 : 0.01}
+                        min={0.0001}
+                        size="wide"
+                    />
+                </div>
+            )}
 
             <div className="space-y-3">
                 <FeeGroup title={`Confirmation fees (${currency})`}>

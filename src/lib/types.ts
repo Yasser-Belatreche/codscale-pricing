@@ -109,13 +109,16 @@ export interface CountryFeesConfig {
     };
 }
 
-export interface CalculatorInputs {
-    countryId: CountryId;
+export interface CountryCalculatorValues {
     purchasePriceInUsd: number;
     sellingPriceInLocal: number;
     cpl: number;
     confirmationRate: number;
     deliveryRate: number;
+}
+
+export interface CalculatorInputs extends CountryCalculatorValues {
+    countryId: CountryId;
 }
 
 export type HeatmapView =

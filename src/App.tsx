@@ -7,9 +7,10 @@ import {
 import { COUNTRIES, getCountryMeta } from './lib/countries';
 import { formatLocal, usdToLocal } from './lib/currency';
 import { profitTargetsUsd } from './lib/calculate-profit-math';
-import { loadFees, loadInputs, saveFees, saveInputs } from './lib/storage';
+import { loadCalculatorState, loadFees, saveCalculatorState, saveFees } from './lib/storage';
 import type {
     CalculatorInputs,
+    CountryCalculatorValues,
     CountryFeesConfig,
     CountryId,
     HeatmapView,
@@ -20,19 +21,23 @@ import { Heatmap } from './components/Heatmap';
 import { NumberInput, SliderField } from './components/Inputs';
 
 export default function App() {
-    const [inputs, setInputs] = useState<CalculatorInputs>(loadInputs);
+    const [calculatorState, setCalculatorState] = useState(loadCalculatorState);
     const [allFees, setAllFees] = useState(loadFees);
     const [heatmapView, setHeatmapView] = useState<HeatmapView>({ type: 'profit' });
     const [cplTarget, setCplTarget] = useState('breakeven');
     const [sellingCpl, setSellingCpl] = useState('1.0$ CPL');
     const [sellingTarget, setSellingTarget] = useState('0$ Profit');
 
+    const inputs: CalculatorInputs = {
+        countryId: calculatorState.selectedCountry,
+        ...calculatorState.byCountry[calculatorState.selectedCountry],
+    };
     const country = getCountryMeta(inputs.countryId);
     const fees = allFees[inputs.countryId];
 
     useEffect(() => {
-        saveInputs(inputs);
-    }, [inputs]);
+        saveCalculatorState(calculatorState);
+    }, [calculatorState]);
 
     useEffect(() => {
         saveFees(allFees);
@@ -70,8 +75,21 @@ export default function App() {
         };
     }, [result, ctx, heatmapView]);
 
-    const patchInputs = (partial: Partial<CalculatorInputs>) => {
-        setInputs(prev => ({ ...prev, ...partial }));
+    const patchInputs = (partial: Partial<CountryCalculatorValues>) => {
+        setCalculatorState(prev => ({
+            ...prev,
+            byCountry: {
+                ...prev.byCountry,
+                [prev.selectedCountry]: {
+                    ...prev.byCountry[prev.selectedCountry],
+                    ...partial,
+                },
+            },
+        }));
+    };
+
+    const switchCountry = (countryId: CountryId) => {
+        setCalculatorState(prev => ({ ...prev, selectedCountry: countryId }));
     };
 
     const patchFees = (next: CountryFeesConfig) => {
@@ -99,7 +117,7 @@ export default function App() {
                     <button
                         key={c.id}
                         type="button"
-                        onClick={() => patchInputs({ countryId: c.id as CountryId })}
+                        onClick={() => switchCountry(c.id as CountryId)}
                         className={`rounded-lg border px-4 py-2 text-sm transition-colors ${
                             inputs.countryId === c.id
                                 ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/20 text-white'

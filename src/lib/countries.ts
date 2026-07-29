@@ -1,4 +1,4 @@
-import type { CountryFeesConfig, CountryId } from './types';
+import type { CountryCalculatorValues, CountryFeesConfig, CountryId } from './types';
 
 export interface CountryMeta {
     id: CountryId;
@@ -44,3 +44,34 @@ export const DEFAULT_FEES: Record<CountryId, CountryFeesConfig> = {
 export function getCountryMeta(id: CountryId): CountryMeta {
     return COUNTRIES.find(c => c.id === id) ?? COUNTRIES[0];
 }
+
+export const DEFAULT_CALCULATOR_VALUES: Record<CountryId, CountryCalculatorValues> = {
+    algeria: {
+        purchasePriceInUsd: 5,
+        sellingPriceInLocal: 2500,
+        cpl: 1.5,
+        confirmationRate: 60,
+        deliveryRate: 70,
+    },
+    libya: {
+        purchasePriceInUsd: 5,
+        sellingPriceInLocal: 90,
+        cpl: 1.5,
+        confirmationRate: 60,
+        deliveryRate: 70,
+    },
+    iraq: {
+        purchasePriceInUsd: 5,
+        sellingPriceInLocal: 6500,
+        cpl: 1.5,
+        confirmationRate: 60,
+        deliveryRate: 70,
+    },
+    lebanon: {
+        purchasePriceInUsd: 5,
+        sellingPriceInLocal: 450000,
+        cpl: 1.5,
+        confirmationRate: 60,
+        deliveryRate: 70,
+    },
+};

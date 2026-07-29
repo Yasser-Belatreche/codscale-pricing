@@ -1,8 +1,14 @@
-import { DEFAULT_FEES } from './countries';
-import type { CalculatorInputs, CountryFeesConfig, CountryId } from './types';
+import { DEFAULT_CALCULATOR_VALUES, DEFAULT_FEES } from './countries';
+import type {
+    CalculatorInputs,
+    CountryCalculatorValues,
+    CountryFeesConfig,
+    CountryId,
+} from './types';
 
 const FEES_KEY = 'codscale-pricing-fees-v2';
-const INPUTS_KEY = 'codscale-pricing-inputs';
+const INPUTS_KEY = 'codscale-pricing-inputs-v2';
+const LEGACY_INPUTS_KEY = 'codscale-pricing-inputs';
 
 function migrateFees(raw: Record<string, CountryFeesConfig>): Record<CountryId, CountryFeesConfig> {
     const base = structuredClone(DEFAULT_FEES);
@@ -43,27 +49,82 @@ export function saveFees(fees: Record<CountryId, CountryFeesConfig>): void {
     localStorage.setItem(FEES_KEY, JSON.stringify(fees));
 }
 
-const DEFAULT_INPUTS: CalculatorInputs = {
-    countryId: 'algeria',
-    purchasePriceInUsd: 5,
-    sellingPriceInLocal: 2500,
-    cpl: 1.5,
-    confirmationRate: 60,
-    deliveryRate: 70,
-};
+interface StoredCalculatorState {
+    selectedCountry: CountryId;
+    byCountry: Record<CountryId, CountryCalculatorValues>;
+}
 
-export function loadInputs(): CalculatorInputs {
+function migrateLegacyInputs(): StoredCalculatorState | null {
     try {
-        const raw = localStorage.getItem(INPUTS_KEY);
+        const raw = localStorage.getItem(LEGACY_INPUTS_KEY);
         if (!raw) {
-            return DEFAULT_INPUTS;
+            return null;
         }
-        return { ...DEFAULT_INPUTS, ...JSON.parse(raw) };
+        const legacy = JSON.parse(raw) as CalculatorInputs;
+        const values: CountryCalculatorValues = {
+            purchasePriceInUsd: legacy.purchasePriceInUsd,
+            sellingPriceInLocal: legacy.sellingPriceInLocal,
+            cpl: legacy.cpl,
+            confirmationRate: legacy.confirmationRate,
+            deliveryRate: legacy.deliveryRate,
+        };
+        const byCountry = structuredClone(DEFAULT_CALCULATOR_VALUES);
+        byCountry[legacy.countryId ?? 'algeria'] = values;
+        return {
+            selectedCountry: legacy.countryId ?? 'algeria',
+            byCountry,
+        };
     } catch {
-        return DEFAULT_INPUTS;
+        return null;
     }
 }
 
-export function saveInputs(inputs: CalculatorInputs): void {
-    localStorage.setItem(INPUTS_KEY, JSON.stringify(inputs));
+function normalizeCalculatorState(raw: Partial<StoredCalculatorState>): StoredCalculatorState {
+    const base = structuredClone(DEFAULT_CALCULATOR_VALUES);
+    const byCountry = { ...base };
+
+    if (raw.byCountry) {
+        for (const countryId of Object.keys(base) as CountryId[]) {
+            const stored = raw.byCountry[countryId];
+            if (stored) {
+                byCountry[countryId] = { ...base[countryId], ...stored };
+            }
+        }
+    }
+
+    return {
+        selectedCountry: raw.selectedCountry ?? 'algeria',
+        byCountry,
+    };
+}
+
+export function loadCalculatorState(): StoredCalculatorState {
+    try {
+        const raw = localStorage.getItem(INPUTS_KEY);
+        if (raw) {
+            return normalizeCalculatorState(JSON.parse(raw));
+        }
+        const legacy = migrateLegacyInputs();
+        if (legacy) {
+            return legacy;
+        }
+    } catch {
+        // fall through
+    }
+
+    return {
+        selectedCountry: 'algeria',
+        byCountry: structuredClone(DEFAULT_CALCULATOR_VALUES),
+    };
+}
+
+export function saveCalculatorState(state: StoredCalculatorState): void {
+    localStorage.setItem(INPUTS_KEY, JSON.stringify(state));
+}
+
+export function toCalculatorInputs(state: StoredCalculatorState): CalculatorInputs {
+    return {
+        countryId: state.selectedCountry,
+        ...state.byCountry[state.selectedCountry],
+    };
 }

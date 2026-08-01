@@ -7,6 +7,7 @@ interface DualCurrencyProps {
     currency: string;
     size?: 'sm' | 'md' | 'lg';
     emphasize?: 'usd' | 'local';
+    tone?: 'default' | 'positive' | 'negative';
 }
 
 export function DualCurrency({
@@ -15,6 +16,7 @@ export function DualCurrency({
     currency,
     size = 'md',
     emphasize = 'usd',
+    tone = 'default',
 }: DualCurrencyProps) {
     const { usd: usdText, local: localText } = formatDualUsd(usd, usdToLocalRate, currency);
     const primary = emphasize === 'usd' ? usdText : localText;
@@ -23,10 +25,16 @@ export function DualCurrency({
 
     const sizeClass =
         size === 'lg' ? 'text-2xl font-bold' : size === 'sm' ? 'text-sm' : 'text-lg font-semibold';
+    const toneClass =
+        tone === 'positive'
+            ? 'text-[var(--color-positive)]'
+            : tone === 'negative'
+              ? 'text-[var(--color-negative)]'
+              : 'text-white';
 
     return (
         <div>
-            <div className={`${sizeClass} text-white`}>{primary}</div>
+            <div className={`${sizeClass} ${toneClass}`}>{primary}</div>
             {showSecondary ? (
                 <div className="text-xs text-[var(--color-muted)]">{secondary}</div>
             ) : null}

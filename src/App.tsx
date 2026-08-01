@@ -98,6 +98,8 @@ export default function App() {
 
     const cplLocal = usdToLocal(inputs.cpl, fees.usdToLocalRate);
     const purchaseLocal = usdToLocal(inputs.purchasePriceInUsd, fees.usdToLocalRate);
+    const isProfitable = (result?.profit ?? 0) >= 0;
+    const profitTone = isProfitable ? 'positive' : 'negative';
 
     return (
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
@@ -197,21 +199,40 @@ export default function App() {
                 <div className="space-y-4">
                     {result ? (
                         <>
-                            <div className="grid gap-3 sm:grid-cols-3">
+                            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                                <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                    <p className="text-xs text-[var(--color-muted)]">
+                                        Cash after fees / delivered
+                                    </p>
+                                    <DualCurrency
+                                        usd={result.netCashCollectedPerDelivered}
+                                        usdToLocalRate={fees.usdToLocalRate}
+                                        currency={country.currency}
+                                        size="lg"
+                                    />
+                                    <p className="mt-1 text-[10px] text-[var(--color-muted)]">
+                                        After COD, TVA & service fees
+                                    </p>
+                                </div>
                                 <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
                                     <p className="text-xs text-[var(--color-muted)]">Profit / delivered</p>
-                                    <div className={result.profit >= 0 ? 'text-[var(--color-positive)]' : 'text-[var(--color-negative)]'}>
-                                        <DualCurrency
-                                            usd={result.profit}
-                                            usdToLocalRate={fees.usdToLocalRate}
-                                            currency={country.currency}
-                                            size="lg"
-                                        />
-                                    </div>
+                                    <DualCurrency
+                                        usd={result.profit}
+                                        usdToLocalRate={fees.usdToLocalRate}
+                                        currency={country.currency}
+                                        size="lg"
+                                        tone={profitTone}
+                                    />
                                 </div>
                                 <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
                                     <p className="text-xs text-[var(--color-muted)]">ROI</p>
-                                    <p className="text-2xl font-bold text-white">
+                                    <p
+                                        className={`text-2xl font-bold ${
+                                            isProfitable
+                                                ? 'text-[var(--color-positive)]'
+                                                : 'text-[var(--color-negative)]'
+                                        }`}
+                                    >
                                         {(result.roi * 100).toFixed(1)}%
                                     </p>
                                 </div>

@@ -145,6 +145,7 @@ export function calculateProfit(
     return {
         roi: snapshot.roi,
         profit: snapshot.profit,
+        netCashCollectedPerDelivered: snapshot.netCashCollectedPerDelivered,
         fees: snapshot.fees,
         estimations: {
             cpl: buildCplEstimations(ctx.gridBaseInput, ctx.c, ctx.d),

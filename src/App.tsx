@@ -100,6 +100,17 @@ export default function App() {
     const purchaseLocal = usdToLocal(inputs.purchasePriceInUsd, fees.usdToLocalRate);
     const isProfitable = (result?.profit ?? 0) >= 0;
     const profitTone = isProfitable ? 'positive' : 'negative';
+    const feeBreakdownItems = result
+        ? ([
+              ['Marketing', result.fees.marketing],
+              ['Confirmation', result.fees.confirmation],
+              ['Fulfilment', result.fees.fulfillment],
+              ['Shipping', result.fees.shipping],
+              ['COD tax', result.fees.cod],
+              ['TVA', result.fees.tva],
+          ] as const)
+        : [];
+    const totalFeesPerDelivered = feeBreakdownItems.reduce((sum, [, amount]) => sum + amount, 0);
 
     return (
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
@@ -274,17 +285,19 @@ export default function App() {
                             </div>
 
                             <Panel title="Fee breakdown (per delivered)">
+                                <div className="mb-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
+                                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)]">
+                                        Total fees
+                                    </p>
+                                    <DualCurrency
+                                        usd={totalFeesPerDelivered}
+                                        usdToLocalRate={fees.usdToLocalRate}
+                                        currency={country.currency}
+                                        size="lg"
+                                    />
+                                </div>
                                 <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                                    {(
-                                        [
-                                            ['Marketing', result.fees.marketing],
-                                            ['Confirmation', result.fees.confirmation],
-                                            ['Fulfilment', result.fees.fulfillment],
-                                            ['Shipping', result.fees.shipping],
-                                            ['COD tax', result.fees.cod],
-                                            ['TVA', result.fees.tva],
-                                        ] as const
-                                    ).map(([label, amount]) => (
+                                    {feeBreakdownItems.map(([label, amount]) => (
                                         <div
                                             key={label}
                                             className="rounded-lg bg-[var(--color-surface)] px-3 py-2"

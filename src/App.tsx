@@ -199,51 +199,77 @@ export default function App() {
                 <div className="space-y-4">
                     {result ? (
                         <>
-                            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                                <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
-                                    <p className="text-xs text-[var(--color-muted)]">
-                                        Cash after fees / delivered
-                                    </p>
-                                    <DualCurrency
-                                        usd={result.netCashCollectedPerDelivered}
-                                        usdToLocalRate={fees.usdToLocalRate}
-                                        currency={country.currency}
-                                        size="lg"
-                                    />
-                                    <p className="mt-1 text-[10px] text-[var(--color-muted)]">
-                                        After COD, TVA & service fees
-                                    </p>
+                            <div className="space-y-3">
+                                <div className="grid gap-3 sm:grid-cols-3">
+                                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                        <p className="text-xs text-[var(--color-muted)]">Profit / delivered</p>
+                                        <DualCurrency
+                                            usd={result.profit}
+                                            usdToLocalRate={fees.usdToLocalRate}
+                                            currency={country.currency}
+                                            size="lg"
+                                            tone={profitTone}
+                                        />
+                                    </div>
+                                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                        <p className="text-xs text-[var(--color-muted)]">ROI</p>
+                                        <p
+                                            className={`text-2xl font-bold ${
+                                                isProfitable
+                                                    ? 'text-[var(--color-positive)]'
+                                                    : 'text-[var(--color-negative)]'
+                                            }`}
+                                        >
+                                            {(result.roi * 100).toFixed(1)}%
+                                        </p>
+                                    </div>
+                                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                        <p className="text-xs text-[var(--color-muted)]">Breakeven CPL</p>
+                                        <DualCurrency
+                                            usd={result.estimations.cpl.breakeven.value}
+                                            usdToLocalRate={fees.usdToLocalRate}
+                                            currency={country.currency}
+                                            size="lg"
+                                        />
+                                    </div>
                                 </div>
-                                <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
-                                    <p className="text-xs text-[var(--color-muted)]">Profit / delivered</p>
-                                    <DualCurrency
-                                        usd={result.profit}
-                                        usdToLocalRate={fees.usdToLocalRate}
-                                        currency={country.currency}
-                                        size="lg"
-                                        tone={profitTone}
-                                    />
-                                </div>
-                                <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
-                                    <p className="text-xs text-[var(--color-muted)]">ROI</p>
-                                    <p
-                                        className={`text-2xl font-bold ${
-                                            isProfitable
-                                                ? 'text-[var(--color-positive)]'
-                                                : 'text-[var(--color-negative)]'
-                                        }`}
-                                    >
-                                        {(result.roi * 100).toFixed(1)}%
-                                    </p>
-                                </div>
-                                <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
-                                    <p className="text-xs text-[var(--color-muted)]">Breakeven CPL</p>
-                                    <DualCurrency
-                                        usd={result.estimations.cpl.breakeven.value}
-                                        usdToLocalRate={fees.usdToLocalRate}
-                                        currency={country.currency}
-                                        size="lg"
-                                    />
+                                <div className="grid gap-3 sm:grid-cols-3">
+                                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                        <p className="text-xs text-[var(--color-muted)]">Investment / delivered</p>
+                                        <DualCurrency
+                                            usd={result.investmentPerDelivered}
+                                            usdToLocalRate={fees.usdToLocalRate}
+                                            currency={country.currency}
+                                            size="lg"
+                                        />
+                                        <p className="mt-1 text-[10px] text-[var(--color-muted)]">
+                                            Product cost + marketing
+                                        </p>
+                                    </div>
+                                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                        <p className="text-xs text-[var(--color-muted)]">Revenue / delivered</p>
+                                        <DualCurrency
+                                            usd={result.revenueBeforeAdsPerDelivered}
+                                            usdToLocalRate={fees.usdToLocalRate}
+                                            currency={country.currency}
+                                            size="lg"
+                                        />
+                                        <p className="mt-1 text-[10px] text-[var(--color-muted)]">
+                                            Before ads, after other fees
+                                        </p>
+                                    </div>
+                                    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] p-4">
+                                        <p className="text-xs text-[var(--color-muted)]">Real revenue / delivered</p>
+                                        <DualCurrency
+                                            usd={result.realRevenueAfterAdsPerDelivered}
+                                            usdToLocalRate={fees.usdToLocalRate}
+                                            currency={country.currency}
+                                            size="lg"
+                                        />
+                                        <p className="mt-1 text-[10px] text-[var(--color-muted)]">
+                                            After ads & service fees
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 

@@ -148,7 +148,20 @@ export function computeProfitSnapshot(
         ).toFixed(2),
     );
 
-    const netCashCollectedPerDelivered = Number(
+    const investmentPerDelivered = Number(
+        (input.purchasePriceInUsd + marketingPerDelivered).toFixed(2),
+    );
+
+    const revenueBeforeAdsPerDelivered = Number(
+        (
+            netRevenueUsd -
+            confirmationPerDelivered -
+            fulfillmentPerDelivered -
+            shippingPerDelivered
+        ).toFixed(2),
+    );
+
+    const realRevenueAfterAdsPerDelivered = Number(
         (
             netRevenueUsd -
             marketingPerDelivered -
@@ -166,7 +179,9 @@ export function computeProfitSnapshot(
     return {
         roi,
         profit,
-        netCashCollectedPerDelivered,
+        investmentPerDelivered,
+        revenueBeforeAdsPerDelivered,
+        realRevenueAfterAdsPerDelivered,
         fees: {
             marketing: Number(marketingPerDelivered.toFixed(2)),
             confirmation: Number(confirmationPerDelivered.toFixed(2)),

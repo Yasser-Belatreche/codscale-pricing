@@ -41,7 +41,9 @@ export interface CalculateProfitSellingPricesByCpl {
 export interface CalculateProfitResult {
     roi: number;
     profit: number;
-    netCashCollectedPerDelivered: number;
+    investmentPerDelivered: number;
+    revenueBeforeAdsPerDelivered: number;
+    realRevenueAfterAdsPerDelivered: number;
     fees: CalculateProfitFees;
     estimations: {
         cpl: CalculateProfitCplEstimations;
@@ -83,7 +85,9 @@ export interface CalculateProfitSnapshotInput {
 export interface CalculateProfitSnapshot {
     roi: number;
     profit: number;
-    netCashCollectedPerDelivered: number;
+    investmentPerDelivered: number;
+    revenueBeforeAdsPerDelivered: number;
+    realRevenueAfterAdsPerDelivered: number;
     fees: CalculateProfitFees;
     netRevenueUsd: number;
     fixedNonMarketingUsd: number;

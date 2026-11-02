@@ -120,7 +120,7 @@ export default function App() {
                 </p>
                 <h1 className="mt-1 text-3xl font-bold text-white">Profit Calculator</h1>
                 <p className="mt-2 max-w-2xl text-sm text-[var(--color-muted)]">
-                    Interactive COD economics for Algeria, Libya, Iraq, and Lebanon. Adjust rates
+                    Interactive COD economics for Algeria, Libya, Iraq, Lebanon, and Tunisia. Adjust rates
                     and prices in real time — fees in local currency, profits in USD + local.
                 </p>
             </header>
@@ -164,7 +164,7 @@ export default function App() {
                                 value={inputs.sellingPriceInLocal}
                                 onChange={v => patchInputs({ sellingPriceInLocal: v })}
                                 suffix={country.currency}
-                                step={50}
+                                step={country.currency === 'TND' ? 1 : 50}
                             />
 
                             <SliderField

@@ -14,11 +14,16 @@ export function usdToLocal(usd: number, usdToLocalRate: number): number {
     return Number((usd * usdToLocalRate).toFixed(2));
 }
 
+const LOCAL_FRACTION_DIGITS: Record<string, number> = {
+    TND: 3,
+};
+
 export function formatLocal(amount: number, currency: string): string {
     if (currency === 'USD') {
         return formatUsd(amount);
     }
-    return `${amount.toLocaleString(undefined, { maximumFractionDigits: 0 })} ${currency}`;
+    const maximumFractionDigits = LOCAL_FRACTION_DIGITS[currency] ?? 0;
+    return `${amount.toLocaleString(undefined, { maximumFractionDigits })} ${currency}`;
 }
 
 export function isUsdCurrency(currency: string): boolean {

@@ -93,7 +93,7 @@ export interface CalculateProfitSnapshot {
     fixedNonMarketingUsd: number;
 }
 
-export type CountryId = 'algeria' | 'libya' | 'iraq' | 'lebanon';
+export type CountryId = 'algeria' | 'libya' | 'iraq' | 'lebanon' | 'tunisia';
 
 export interface CountryFeesConfig {
     usdToLocalRate: number;

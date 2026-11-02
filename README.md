@@ -1,6 +1,6 @@
 # COD Scale Profit Calculator
 
-Interactive COD profit calculator for Algeria, Libya, Iraq, and Lebanon.
+Interactive COD profit calculator for Algeria, Libya, Iraq, Lebanon, and Tunisia.
 
 ## Features
 

@@ -12,6 +12,7 @@ export const COUNTRIES: CountryMeta[] = [
     { id: 'libya', name: 'Libya', currency: 'LYD', flag: '🇱🇾' },
     { id: 'iraq', name: 'Iraq', currency: 'IQD', flag: '🇮🇶' },
     { id: 'lebanon', name: 'Lebanon', currency: 'USD', flag: '🇱🇧' },
+    { id: 'tunisia', name: 'Tunisia', currency: 'TND', flag: '🇹🇳' },
 ];
 
 export const DEFAULT_FEES: Record<CountryId, CountryFeesConfig> = {
@@ -38,6 +39,12 @@ export const DEFAULT_FEES: Record<CountryId, CountryFeesConfig> = {
         confirmation: { cancelled: 0.1, returned: 0.2, delivered: 0.3 },
         fulfillment: { packaged: 0.5, returned: 0.4, delivered: 0.2 },
         shipping: { codPercentage: 0, tvaPercentage: 11, home: 3.5, return: 1.5 },
+    },
+    tunisia: {
+        usdToLocalRate: 3,
+        confirmation: { cancelled: 0.3, returned: 0.6, delivered: 0.9 },
+        fulfillment: { packaged: 1.5, returned: 1.1, delivered: 0.6 },
+        shipping: { codPercentage: 2, tvaPercentage: 19, home: 10, return: 5 },
     },
 };
 
@@ -70,6 +77,13 @@ export const DEFAULT_CALCULATOR_VALUES: Record<CountryId, CountryCalculatorValue
     lebanon: {
         purchasePriceInUsd: 5,
         sellingPriceInLocal: 25,
+        cpl: 1.5,
+        confirmationRate: 60,
+        deliveryRate: 70,
+    },
+    tunisia: {
+        purchasePriceInUsd: 5,
+        sellingPriceInLocal: 55,
         cpl: 1.5,
         confirmationRate: 60,
         deliveryRate: 70,

@@ -34,6 +34,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
     };
 
     const usesUsd = isUsdCurrency(currency);
+    const amountStep = currency === 'TND' ? 0.1 : 1;
 
     return (
         <Panel title="Service fees & exchange rate">
@@ -68,6 +69,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                     <NumberInput
@@ -79,6 +81,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                     <NumberInput
@@ -90,6 +93,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                 </FeeGroup>
@@ -104,6 +108,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                     <NumberInput
@@ -115,6 +120,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                     <NumberInput
@@ -126,6 +132,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                 </FeeGroup>
@@ -140,6 +147,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                     <NumberInput
@@ -151,6 +159,7 @@ export function FeesPanel({ fees, countryId, onChange }: FeesPanelProps) {
                             })
                         }
                         suffix={currency}
+                        step={amountStep}
                         size="wide"
                     />
                     <NumberInput

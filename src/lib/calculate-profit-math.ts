@@ -23,6 +23,11 @@ export function perDeliveredMarketing(
     return cplUsd / (confirmationRate * deliveryRate);
 }
 
+/** Returned orders for each delivered order. At a 50% delivery rate this is 1. */
+function returnedOrdersPerDelivered(deliveryRate: number): number {
+    return (1 - deliveryRate) / deliveryRate;
+}
+
 export function perDeliveredConfirmation(
     cancelledUsd: number,
     returnedUsd: number,
@@ -30,11 +35,10 @@ export function perDeliveredConfirmation(
     confirmationRate: number,
     deliveryRate: number,
 ): number {
-    const returnRate = 1 - deliveryRate;
     const cancelledPerDelivered =
         ((1 - confirmationRate) * cancelledUsd) / (confirmationRate * deliveryRate);
-    const returnedFeesForNonDelivered = returnRate * returnedUsd;
-    return cancelledPerDelivered + returnedFeesForNonDelivered + deliveredUsd;
+    const returnedPerDelivered = returnedOrdersPerDelivered(deliveryRate) * returnedUsd;
+    return cancelledPerDelivered + returnedPerDelivered + deliveredUsd;
 }
 
 export function perDeliveredFulfillment(
@@ -44,10 +48,9 @@ export function perDeliveredFulfillment(
     _confirmationRate: number,
     deliveryRate: number,
 ): number {
-    const returnRate = 1 - deliveryRate;
-
     const packagingPerDelivered = packagedUsdPerConfirmedOrder / deliveryRate;
-    return packagingPerDelivered + deliveredUsd + returnRate * returnedUsd;
+    const returnedPerDelivered = returnedOrdersPerDelivered(deliveryRate) * returnedUsd;
+    return packagingPerDelivered + deliveredUsd + returnedPerDelivered;
 }
 
 export function perDeliveredShippingUsd(
@@ -66,8 +69,7 @@ export function perDeliveredShippingUsd(
     const averageOutbound = outboundCosts.reduce((sum, v) => sum + v, 0) / outboundCosts.length;
     const averageReturn =
         deliveryRates.reduce((sum, r) => sum + r.return, 0) / deliveryRates.length;
-    const returnRate = 1 - deliveryRate;
-    return averageOutbound + returnRate * averageReturn;
+    return averageOutbound + returnedOrdersPerDelivered(deliveryRate) * averageReturn;
 }
 
 export function profitTargetsUsd(): number[] {
